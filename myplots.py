@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import os
 import math
 import matplotlib
 import matplotlib.pyplot as plt
@@ -63,8 +64,7 @@ class _Brewer(object):
 
     @classmethod
     def Colors(cls):
-        """Returns the list of colors.
-        """
+        """Returns the list of colors."""
         return cls.colors
 
     @classmethod
@@ -105,8 +105,7 @@ class _Brewer(object):
 
 
 def _UnderrideColor(options):
-    """If color is not in the options, chooses a color.
-    """
+    """If color is not in the options, chooses a color."""
     if "color" in options:
         return options
 
@@ -223,10 +222,10 @@ def Plot(obj, ys=None, style="", **options):
     """Plots a line.
 
     Args:
-      obj: sequence of x values, or Series, or anything with Render()
-      ys: sequence of y values
-      style: style string passed along to plt.plot
-      options: keyword args passed to plt.plot
+        obj: sequence of x values, or Series, or anything with Render()
+        ys: sequence of y values
+        style: style string passed along to plt.plot
+        options: keyword args passed to plt.plot
     """
     options = _UnderrideColor(options)
     label = getattr(obj, "label", "_nolegend_")
@@ -250,10 +249,10 @@ def Vlines(xs, y1, y2, **options):
     """Plots a set of vertical lines.
 
     Args:
-      xs: sequence of x values
-      y1: sequence of y values
-      y2: sequence of y values
-      options: keyword args passed to plt.vlines
+        xs: sequence of x values
+        y1: sequence of y values
+        y2: sequence of y values
+        options: keyword args passed to plt.vlines
     """
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=1, alpha=0.5)
@@ -264,10 +263,10 @@ def Hlines(ys, x1, x2, **options):
     """Plots a set of horizontal lines.
 
     Args:
-      ys: sequence of y values
-      x1: sequence of x values
-      x2: sequence of x values
-      options: keyword args passed to plt.vlines
+        ys: sequence of y values
+        x1: sequence of x values
+        x2: sequence of x values
+        options: keyword args passed to plt.vlines
     """
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=1, alpha=0.5)
@@ -278,8 +277,8 @@ def axvline(x, **options):
     """Plots a vertical line.
 
     Args:
-      x: x location
-      options: keyword args passed to plt.axvline
+        x: x location
+        options: keyword args passed to plt.axvline
     """
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=1, alpha=0.5)
@@ -290,8 +289,8 @@ def axhline(y, **options):
     """Plots a horizontal line.
 
     Args:
-      y: y location
-      options: keyword args passed to plt.axhline
+        y: y location
+        options: keyword args passed to plt.axhline
     """
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=1, alpha=0.5)
@@ -299,8 +298,7 @@ def axhline(y, **options):
 
 
 def tight_layout(**options):
-    """Adjust subplots to minimize padding and margins.
-    """
+    """Adjust subplots to minimize padding and margins."""
     options = _Underride(options, wspace=0.1, hspace=0.1, left=0, right=1, bottom=0, top=1)
     plt.tight_layout()
     plt.subplots_adjust(**options)
@@ -310,11 +308,11 @@ def FillBetween(xs, y1, y2=None, where=None, **options):
     """Fills the space between two lines.
 
     Args:
-      xs: sequence of x values
-      y1: sequence of y values
-      y2: sequence of y values
-      where: sequence of boolean
-      options: keyword args passed to plt.fill_between
+        xs: sequence of x values
+        y1: sequence of y values
+        y2: sequence of y values
+        where: sequence of boolean
+        options: keyword args passed to plt.fill_between
     """
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=0, alpha=0.5)
@@ -325,9 +323,9 @@ def Bar(xs, ys, **options):
     """Plots a line.
 
     Args:
-      xs: sequence of x values
-      ys: sequence of y values
-      options: keyword args passed to plt.bar
+        xs: sequence of x values
+        ys: sequence of y values
+        options: keyword args passed to plt.bar
     """
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=0, alpha=0.6)
@@ -365,8 +363,8 @@ def Pdf(pdf, **options):
     """Plots a Pdf, Pmf, or Hist as a line.
 
     Args:
-      pdf: Pdf, Pmf, or Hist object
-      options: keyword args passed to plt.plot
+        pdf: Pdf, Pmf, or Hist object
+        options: keyword args passed to plt.plot
     """
     low, high = options.pop("low", None), options.pop("high", None)
     n = options.pop("n", 101)
@@ -382,8 +380,8 @@ def Pdfs(pdfs, **options):
     options for each pdf, make multiple calls to Pdf.
 
     Args:
-      pdfs: sequence of PDF objects
-      options: keyword args passed to plt.plot
+        pdfs: sequence of PDF objects
+        options: keyword args passed to plt.plot
     """
     for pdf in pdfs:
         Pdf(pdf, **options)
@@ -398,8 +396,8 @@ def Hist(hist, **options):
     as the values.
 
     Args:
-      hist: Hist or Pmf object
-      options: keyword args passed to plt.bar
+        hist: Hist or Pmf object
+        options: keyword args passed to plt.bar
     """
     # find the minimum distance between adjacent values
     xs, ys = hist.Render()
@@ -441,8 +439,8 @@ def Hists(hists, **options):
     options for each pmf, make multiple calls to Pmf.
 
     Args:
-      hists: list of two Hist or Pmf objects
-      options: keyword args passed to plt.plot
+        hists: list of two Hist or Pmf objects
+        options: keyword args passed to plt.plot
     """
     for hist in hists:
         Hist(hist, **options)
@@ -452,8 +450,8 @@ def Pmf(pmf, **options):
     """Plots a Pmf or Hist as a line.
 
     Args:
-      pmf: Hist or Pmf object
-      options: keyword args passed to plt.plot
+        pmf: Hist or Pmf object
+        options: keyword args passed to plt.plot
     """
     xs, ys = pmf.Render()
     low, high = min(xs), max(xs)
@@ -503,8 +501,8 @@ def Pmfs(pmfs, **options):
     options for each pmf, make multiple calls to Pmf.
 
     Args:
-      pmfs: sequence of PMF objects
-      options: keyword args passed to plt.plot
+        pmfs: sequence of PMF objects
+        options: keyword args passed to plt.plot
     """
     for pmf in pmfs:
         Pmf(pmf, **options)
@@ -527,14 +525,14 @@ def Cdf(cdf, complement=False, transform=None, **options):
     """Plots a CDF as a line.
 
     Args:
-      cdf: Cdf object
-      complement: boolean, whether to plot the complementary CDF
-      transform: string, one of 'exponential', 'pareto', 'weibull', 'gumbel'
-      options: keyword args passed to plt.plot
+        cdf: Cdf object
+        complement: boolean, whether to plot the complementary CDF
+        transform: string, one of 'exponential', 'pareto', 'weibull', 'gumbel'
+        options: keyword args passed to plt.plot
 
     Returns:
-      dictionary with the scale options that should be passed to
-      Config, Show or Save.
+        dictionary with the scale options that should be passed to
+        Config, Show or Save.
     """
     xs, ps = cdf.Render()
     xs = np.asarray(xs)
@@ -728,8 +726,7 @@ def Config(**options):
 
 
 def set_font_size(title_size=16, label_size=16, ticklabel_size=14, legend_size=14):
-    """Set font sizes for the title, labels, ticklabels, and legend.
-    """
+    """Set font sizes for the title, labels, ticklabels, and legend."""
 
     def set_text_size(texts, size):
         for text in texts:
@@ -803,9 +800,9 @@ def Save(root=None, formats=None, **options):
     with my newer code, especially in Jupyter notebooks.
 
     Args:
-      root: string filename root
-      formats: list of string formats
-      options: keyword args used to invoke various plt functions
+        root: string filename root
+        formats: list of string formats
+        options: keyword args used to invoke various plt functions
     """
     clf = options.pop("clf", True)
 
@@ -819,7 +816,7 @@ def Save(root=None, formats=None, **options):
     Config(**options)
 
     if formats is None:
-        formats = ["pdf", "png"]
+        formats = ["png"]
 
     try:
         formats.remove("plotly")
@@ -840,12 +837,12 @@ def save(root, formats=None, **options):
     For options, see plt.savefig.
 
     Args:
-      root: string filename root
-      formats: list of string formats
-      options: keyword args passed to plt.savefig
+        root: string filename root
+        formats: list of string formats
+        options: keyword args passed to plt.savefig
     """
     if formats is None:
-        formats = ["pdf", "png"]
+        formats = ["png"]
 
     try:
         formats.remove("plotly")
@@ -857,17 +854,20 @@ def save(root, formats=None, **options):
         SaveFormat(root, fmt, **options)
 
 
-def SaveFormat(root, fmt="eps", **options):
+def SaveFormat(root, fmt="png", **options):
     """Writes the current figure to a file in the given format.
 
     Args:
-      root: string filename root
-      fmt: string format
+        root: string filename root
+        fmt: string format
     """
     _Underride(options, dpi=300)
-    filename = "%s.%s" % (root, fmt)
+    resdir = os.getcwd() + "/results"
+    if not os.path.isdir(resdir):
+        os.makedirs(resdir)
+    filename = f"{resdir}/{root}.{fmt}"
     print("Writing", filename)
-    plt.savefig(filename, format=fmt, **options)
+    plt.savefig(filename, format=fmt, dpi=300)
 
 
 # provide aliases for calling functions with lower-case names
