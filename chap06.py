@@ -3,6 +3,7 @@ import warnings
 import sys
 import math
 import scipy
+import bisect
 import random
 import numpy as np
 from numpy.core.fromnumeric import cumsum
@@ -70,14 +71,50 @@ def MakePdfExample(n=500):
     myplots.Save(root="pdf_example", xlabel="Height (cm)", ylabel="Density")
 
 
+def calcMedian(data):
+    d = {}
+    for x in data:
+        d[x] = d.get(x, 0) + 1
+    total = sum(d.values())
+    for key, val in d.items():
+        d[key] = val / total
+
+    xs, freq = zip(*sorted(d.items()))
+    xs = np.asarray(xs)
+    ps = np.cumsum(freq, dtype=np.float)
+    ps = ps / ps[-1]
+
+    index = bisect.bisect_left(ps, 0.5)
+    return xs[index]
+
+
+def calcSkewness(xs):
+    return StandardizedMoment(xs, 3)
+
+
+def RawMoment(xs, k):
+    return sum(x ** k for x in xs) / len(xs)
+
+
+def CentralMoment(xs, k):
+    mean = RawMoment(xs, 1)
+    return sum((x - mean) ** k for x in xs) / len(xs)
+
+
+def StandardizedMoment(xs, k):
+    var = CentralMoment(xs, 2)
+    std = math.sqrt(var)
+    return CentralMoment(xs, k) / std ** k
+
+
 def Summarize(data):
     mean = data.mean()
     std = data.std()
-    median = mystats.Median(data)
+    median = calcMedian(data)
     print("mean", mean)
     print("std", std)
     print("median", median)
-    print("skewness", mystats.Skewness(data))
+    print("skewness", calcSkewness(data))
     print("pearson skewness", mystats.PearsonMedianSkewness(data))
 
     return mean, median
